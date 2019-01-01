@@ -1,13 +1,21 @@
 package main
 
-import . "github.com/saichler/habitat/service"
-import . "github.com/saichler/files/service"
+import (
+	. "github.com/saichler/files/service"
+	. "github.com/saichler/habitat/service"
+)
 
 var ServiceInstance Service = &FileService{}
 
 func main(){
-	fs:=&FileService{}
 	svm,_:=NewServiceManager()
+
+	/*
+	uplinkHID:=svm.Habitat().Uplink("192.168.86.29")
+	fmt.Println(uplinkHID.String())
+*/
+	fs:=&FileService{}
 	svm.AddService(fs)
+
 	svm.WaitForShutdown()
 }
