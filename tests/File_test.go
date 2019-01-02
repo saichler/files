@@ -6,8 +6,8 @@ import (
 	"github.com/saichler/habitat"
 	"github.com/saichler/habitat/service"
 	"github.com/sirupsen/logrus"
-	"testing"
 	"time"
+	"testing"
 )
 
 func startFileService(t *testing.T) *fservice.FileService{
@@ -42,7 +42,6 @@ func TestFileService(t *testing.T){
 
 
 func TestRemoteService(t *testing.T){
-
 	fs:=startFileService(t)
 	sm:=fs.GetManager()
 
@@ -60,4 +59,25 @@ func TestRemoteService(t *testing.T){
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE,[]byte("some large remote file"))
 
 	fs.GetManager().WaitForShutdown()
+}
+
+func TestRemoteService2(t *testing.T) {
+	fs:=startFileService(t)
+
+	logrus.Info("Waiting")
+	time.Sleep(time.Second*10)
+	logrus.Info("Sending Message")
+
+	sm:=fs.GetManager()
+	dest:=habitat.NewSID(habitat.NewHID("192.168.86.29",52001),fs.SID())
+
+	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE_LIST,[]byte("/mnt/Vol1/Media/complete"))
+
+	logrus.Info("Waiting")
+	time.Sleep(time.Second*10)
+	logrus.Info("Sending Message")
+
+	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE,[]byte("/mnt/Vol1/Media/complete/VID_20181003_184455AA.MP4"))
+
+	sm.WaitForShutdown()
 }
