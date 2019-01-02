@@ -6,12 +6,3 @@ import (
 )
 
 var ServiceInstance Service = &FileService{}
-
-func main(){
-	svm,_:=NewServiceManager()
-
-	fs:=&FileService{}
-	svm.AddService(fs)
-
-	svm.WaitForShutdown()
-}

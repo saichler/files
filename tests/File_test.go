@@ -26,16 +26,15 @@ func startFileService(t *testing.T) *fservice.FileService{
 
 func TestFileService(t *testing.T){
 	fs1:=startFileService(t)
-	sm1:=fs1.GetManager()
+	sm1:=fs1.ServiceManager()
 	logrus.Info("Service 1 created ")
 
 	fs2:=startFileService(t)
-	sm2:=fs2.GetManager()
 
 	time.Sleep(time.Second)
 
-	sm1.CreateAndSend(fs1,sm2.Source(fs2),handlers.REQUEST_FILE_LIST,[]byte("some directory"))
-	sm1.CreateAndSend(fs1,sm2.Source(fs2),handlers.REQUEST_FILE,[]byte("some file"))
+	sm1.CreateAndSend(fs1,fs2.ServiceID(),handlers.REQUEST_FILE_LIST,[]byte("some directory"))
+	sm1.CreateAndSend(fs1,fs2.ServiceID(),handlers.REQUEST_FILE,[]byte("some file"))
 
 	time.Sleep(time.Second*2)
 }
@@ -43,13 +42,13 @@ func TestFileService(t *testing.T){
 
 func TestRemoteService(t *testing.T){
 	fs:=startFileService(t)
-	sm:=fs.GetManager()
+	sm:=fs.ServiceManager()
 
 	uplinkHID:=sm.Habitat().Uplink("some ip")
 
 	time.Sleep(time.Second)
 
-	dest:=habitat.NewSID(uplinkHID,fs.SID())
+	dest:=habitat.NewServiceID(uplinkHID,0,fs.ServiceID().Topic())
 
 	time.Sleep(time.Second*2)
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE_LIST,[]byte("some directory"))
@@ -58,7 +57,7 @@ func TestRemoteService(t *testing.T){
 
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE,[]byte("some large remote file"))
 
-	fs.GetManager().WaitForShutdown()
+	fs.ServiceManager().WaitForShutdown()
 }
 
 func TestRemoteService2(t *testing.T) {
@@ -68,8 +67,8 @@ func TestRemoteService2(t *testing.T) {
 	time.Sleep(time.Second*10)
 	logrus.Info("Sending Message")
 
-	sm:=fs.GetManager()
-	dest:=habitat.NewSID(habitat.NewHID("192.168.86.29",52001),fs.SID())
+	sm:=fs.ServiceManager()
+	dest:=habitat.NewServiceID(habitat.NewHID("192.168.86.29",52001),0,fs.ServiceID().Topic())
 
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE_LIST,[]byte("/mnt/Vol1/Media/complete"))
 
@@ -89,8 +88,8 @@ func TestWithAdjacent(t *testing.T) {
 	time.Sleep(time.Second*10)
 	logrus.Info("Sending Message")
 
-	sm:=fs.GetManager()
-	adjacents:=make([]*habitat.SID,0)
+	sm:=fs.ServiceManager()
+	adjacents:=make([]*habitat.ServiceID,0)
 	for;len(adjacents)==0; {
 		logrus.Info("no adjected yet")
 		time.Sleep(time.Second)

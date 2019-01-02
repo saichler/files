@@ -2,19 +2,34 @@ package service
 
 import (
 	. "github.com/saichler/files/handlers"
+	. "github.com/saichler/habitat"
 	. "github.com/saichler/habitat/service"
 )
 
 type FileService struct {
 	svm *ServiceManager
+	sid *ServiceID
 }
 
-func (s *FileService) SID() uint16 {
-	return 11
-}
+const (
+	FILE_SERVICE_TOPIC="File Service Topic"
+)
 
 func (s *FileService) Name() string {
 	return "File Service"
+}
+
+func (s *FileService) ServiceID() *ServiceID {
+	return s.sid
+}
+
+func (s *FileService) ServiceManager() *ServiceManager {
+	return s.svm
+}
+
+func (s *FileService) Init(svm *ServiceManager,componentID uint16) {
+	s.svm = svm
+	s.sid = NewServiceID(svm.HID(),componentID,FILE_SERVICE_TOPIC)
 }
 
 func (s *FileService) ServiceMessageHandlers()[]ServiceMessageHandler {
@@ -23,13 +38,6 @@ func (s *FileService) ServiceMessageHandlers()[]ServiceMessageHandler {
 		&ReplyFileHandler{},
 		&ReplyNoSuchFileHandler{},
 		&RequestFileListHandler{},
-		&ReplyFileListHandler{}}
-}
-
-func(s *FileService) SetManager(svm *ServiceManager) {
-	s.svm = svm
-}
-
-func(s *FileService) GetManager() *ServiceManager{
-	return s.svm
+		&ReplyFileListHandler{},
+	    &StartFileListHandler{}}
 }
