@@ -81,3 +81,23 @@ func TestRemoteService2(t *testing.T) {
 
 	sm.WaitForShutdown()
 }
+
+func TestWithAdjacent(t *testing.T) {
+	fs:=startFileService(t)
+
+	logrus.Info("Waiting")
+	time.Sleep(time.Second*10)
+	logrus.Info("Sending Message")
+
+	sm:=fs.GetManager()
+	adjacents:=make([]*habitat.SID,0)
+	for;len(adjacents)==0; {
+		logrus.Info("no adjected yet")
+		time.Sleep(time.Second)
+		adjacents = sm.GetAllAdjacents(fs)
+	}
+
+	sm.CreateAndSend(fs,adjacents[0],handlers.REQUEST_FILE_LIST,[]byte("/mnt/Vol1/Media/complete"))
+
+	sm.WaitForShutdown()
+}
