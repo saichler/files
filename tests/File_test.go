@@ -85,7 +85,7 @@ func TestWithAdjacent(t *testing.T) {
 	fs:=startFileService(t)
 
 	logrus.Info("Waiting")
-	time.Sleep(time.Second*10)
+	time.Sleep(time.Second*5)
 	logrus.Info("Sending Message")
 
 	sm:=fs.ServiceManager()
@@ -96,7 +96,13 @@ func TestWithAdjacent(t *testing.T) {
 		adjacents = sm.GetAllAdjacents(fs)
 	}
 
-	sm.CreateAndSend(fs,adjacents[0],handlers.REQUEST_FILE_LIST,[]byte("/mnt/Vol1/Media/complete"))
+	sm.CreateAndSend(fs,adjacents[0],handlers.REQUEST_FILE_LIST,[]byte("/home/saichler/tmp"))
+
+	logrus.Info("Waiting")
+	time.Sleep(time.Second*5)
+	logrus.Info("Sending Message")
+
+	sm.CreateAndSend(fs,adjacents[0],handlers.REQUEST_FILE,[]byte("/home/saichler/tmp/vts250.zip"))
 
 	sm.WaitForShutdown()
 }

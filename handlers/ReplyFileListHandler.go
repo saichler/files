@@ -18,7 +18,7 @@ func (h *ReplyFileListHandler) Type() uint16 {
 
 func (h *ReplyFileListHandler) HandleMessage(svm *ServiceManager,service Service,m *Message) {
 	logrus.Info("Received File List")
-	ba:=utils.NewByteArrayWithData(m.Data,0)
+	ba:=utils.NewByteSliceWithData(m.Data,0)
 	fi:=FromBytes(ba)
 	fi.Print()
 }

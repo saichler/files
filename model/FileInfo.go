@@ -84,12 +84,12 @@ func (fi *FileInfo) getSize() string {
 }
 
 func (fi *FileInfo) Bytes() []byte {
-	ba := NewByteArray()
+	ba := NewByteSlice()
 	fi.bytes(ba)
 	return ba.Data()
 }
 
-func (fi *FileInfo) bytes(ba *ByteArray) {
+func (fi *FileInfo) bytes(ba *ByteSlice) {
 	ba.AddString(fi.Name)
 	ba.AddInt64(fi.Size)
 	ba.AddBool(fi.IsDir)
@@ -105,7 +105,7 @@ func (fi *FileInfo) bytes(ba *ByteArray) {
 	}
 }
 
-func FromBytes(ba *ByteArray) *FileInfo {
+func FromBytes(ba *ByteSlice) *FileInfo {
 	fi:=&FileInfo{}
 	fi.Name=ba.GetString()
 	fi.Size=ba.GetInt64()

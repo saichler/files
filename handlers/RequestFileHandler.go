@@ -20,7 +20,7 @@ func (h *RequestFileHandler) HandleMessage(svm *ServiceManager,service Service,m
 	filename:=string(m.Data)
 	data,err:=ioutil.ReadFile(filename)
 	if err!=nil {
-		svm.CreateAndReply(service,m,REPLY_NO_SUCH_FILE,m.Data)
+		svm.CreateAndReply(service,m,REPLY_NO_SUCH_FILE,[]byte(err.Error()))
 	}
 	logrus.Info("File size="+strconv.Itoa(len(data)))
 	svm.CreateAndReply(service,m,REPLY_FILE,data)
