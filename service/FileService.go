@@ -41,3 +41,7 @@ func (s *FileService) ServiceMessageHandlers()[]ServiceMessageHandler {
 		&ReplyFileListHandler{},
 	    &StartFileListHandler{}}
 }
+
+func (s *FileService) UnreachableMessageHandlers()[]ServiceMessageHandler {
+	return s.ServiceMessageHandlers()
+}

@@ -63,12 +63,14 @@ func TestRemoteService(t *testing.T){
 func TestRemoteService2(t *testing.T) {
 	fs:=startFileService(t)
 
+	fs.ServiceManager().Habitat().Uplink("192.168.86.29")
+
 	Info("Waiting")
 	time.Sleep(time.Second*10)
 	Info("Sending Message")
 
 	sm:=fs.ServiceManager()
-	dest:=habitat.NewServiceID(habitat.NewHID("192.168.86.29",52001),0,fs.ServiceID().Topic())
+	dest:=habitat.NewServiceID(habitat.NewHID("192.168.86.29",52000),0,fs.ServiceID().Topic())
 
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE_LIST,[]byte("/mnt/Vol1/Media/complete"))
 
