@@ -3,7 +3,6 @@ package model
 import (
 	"errors"
 	. "github.com/saichler/utils/golang"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
 	"strconv"
 )
@@ -60,9 +59,9 @@ func (fi *FileInfo) print(lvl int) {
 		space+="   "
 	}
 	if fi.IsDir {
-		logrus.Info(space + fi.Name)
+		Info(space + fi.Name)
 	} else {
-		logrus.Info(space + fi.getSize())
+		Info(space + fi.getSize())
 	}
 	if fi.IsDir {
 		for _,f:=range fi.Files {

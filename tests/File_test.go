@@ -5,7 +5,7 @@ import (
 	fservice "github.com/saichler/files/service"
 	"github.com/saichler/habitat"
 	"github.com/saichler/habitat/service"
-	"github.com/sirupsen/logrus"
+	. "github.com/saichler/utils/golang"
 	"time"
 	"testing"
 )
@@ -14,7 +14,7 @@ func startFileService(t *testing.T) *fservice.FileService{
 	sm,err:=service.NewServiceManager()
 	if err!=nil {
 		t.Fail()
-		logrus.Error(err)
+		Error(err)
 		return nil
 	}
 
@@ -27,7 +27,7 @@ func startFileService(t *testing.T) *fservice.FileService{
 func TestFileService(t *testing.T){
 	fs1:=startFileService(t)
 	sm1:=fs1.ServiceManager()
-	logrus.Info("Service 1 created ")
+	Info("Service 1 created ")
 
 	fs2:=startFileService(t)
 
@@ -63,18 +63,18 @@ func TestRemoteService(t *testing.T){
 func TestRemoteService2(t *testing.T) {
 	fs:=startFileService(t)
 
-	logrus.Info("Waiting")
+	Info("Waiting")
 	time.Sleep(time.Second*10)
-	logrus.Info("Sending Message")
+	Info("Sending Message")
 
 	sm:=fs.ServiceManager()
 	dest:=habitat.NewServiceID(habitat.NewHID("192.168.86.29",52001),0,fs.ServiceID().Topic())
 
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE_LIST,[]byte("/mnt/Vol1/Media/complete"))
 
-	logrus.Info("Waiting")
+	Info("Waiting")
 	time.Sleep(time.Second*10)
-	logrus.Info("Sending Message")
+	Info("Sending Message")
 
 	sm.CreateAndSend(fs,dest,handlers.REQUEST_FILE,[]byte("/mnt/Vol1/Media/complete/VID_20181003_184455AA.MP4"))
 
@@ -84,23 +84,23 @@ func TestRemoteService2(t *testing.T) {
 func TestWithAdjacent(t *testing.T) {
 	fs:=startFileService(t)
 
-	logrus.Info("Waiting")
+	Info("Waiting")
 	time.Sleep(time.Second*5)
-	logrus.Info("Sending Message")
+	Info("Sending Message")
 
 	sm:=fs.ServiceManager()
 	adjacents:=make([]*habitat.ServiceID,0)
 	for;len(adjacents)==0; {
-		logrus.Info("no adjected yet")
+		Info("no adjected yet")
 		time.Sleep(time.Second)
 		adjacents = sm.GetAllAdjacents(fs)
 	}
 
 	sm.CreateAndSend(fs,adjacents[0],handlers.REQUEST_FILE_LIST,[]byte("/home/saichler/tmp"))
 
-	logrus.Info("Waiting")
+	Info("Waiting")
 	time.Sleep(time.Second*5)
-	logrus.Info("Sending Message")
+	Info("Sending Message")
 
 	sm.CreateAndSend(fs,adjacents[0],handlers.REQUEST_FILE,[]byte("/home/saichler/tmp/vts250.zip"))
 

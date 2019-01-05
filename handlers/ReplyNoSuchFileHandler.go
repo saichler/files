@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	. "github.com/saichler/habitat"
 	. "github.com/saichler/habitat/service"
-	"github.com/sirupsen/logrus"
+	. "github.com/saichler/utils/golang"
 )
-import . "github.com/saichler/habitat"
 
 type ReplyNoSuchFileHandler struct {
 }
@@ -16,5 +16,5 @@ func (h *ReplyNoSuchFileHandler) Type() uint16 {
 
 func (h *ReplyNoSuchFileHandler) HandleMessage(svm *ServiceManager,service Service,m *Message) {
 	filename:=string(m.Data)
-	logrus.Error("No Such file/dir:"+filename)
+	Error("No Such file/dir:"+filename)
 }

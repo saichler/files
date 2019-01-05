@@ -2,11 +2,11 @@ package handlers
 
 import (
 	. "github.com/saichler/habitat/service"
-	"github.com/sirupsen/logrus"
+	. "github.com/saichler/habitat"
 	"io/ioutil"
 	"strconv"
+	. "github.com/saichler/utils/golang"
 )
-import . "github.com/saichler/habitat"
 
 type RequestFileHandler struct {
 }
@@ -22,6 +22,6 @@ func (h *RequestFileHandler) HandleMessage(svm *ServiceManager,service Service,m
 	if err!=nil {
 		svm.CreateAndReply(service,m,REPLY_NO_SUCH_FILE,[]byte(err.Error()))
 	}
-	logrus.Info("File size="+strconv.Itoa(len(data)))
+	Info("File size="+strconv.Itoa(len(data)))
 	svm.CreateAndReply(service,m,REPLY_FILE,data)
 }
