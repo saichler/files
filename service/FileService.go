@@ -2,8 +2,8 @@ package service
 
 import (
 	. "github.com/saichler/files/handlers"
-	. "github.com/saichler/habitat"
-	. "github.com/saichler/habitat/service"
+	. "github.com/saichler/habitat/golang/habitat"
+	. "github.com/saichler/habitat/golang/service"
 )
 
 type FileService struct {
@@ -12,7 +12,7 @@ type FileService struct {
 }
 
 const (
-	FILE_SERVICE_TOPIC="File Service Topic"
+	FILE_SERVICE_TOPIC = "File Service Topic"
 )
 
 func (s *FileService) Name() string {
@@ -27,21 +27,21 @@ func (s *FileService) ServiceManager() *ServiceManager {
 	return s.svm
 }
 
-func (s *FileService) Init(svm *ServiceManager,componentID uint16) {
+func (s *FileService) Init(svm *ServiceManager, componentID uint16) {
 	s.svm = svm
-	s.sid = NewServiceID(svm.HID(),componentID,FILE_SERVICE_TOPIC)
+	s.sid = NewServiceID(svm.HID(), componentID, FILE_SERVICE_TOPIC)
 }
 
-func (s *FileService) ServiceMessageHandlers()[]ServiceMessageHandler {
+func (s *FileService) ServiceMessageHandlers() []ServiceMessageHandler {
 	return []ServiceMessageHandler{
 		&RequestFileHandler{},
 		&ReplyFileHandler{},
 		&ReplyNoSuchFileHandler{},
 		&RequestFileListHandler{},
 		&ReplyFileListHandler{},
-	    &StartFileListHandler{}}
+		&StartFileListHandler{}}
 }
 
-func (s *FileService) UnreachableMessageHandlers()[]ServiceMessageHandler {
+func (s *FileService) UnreachableMessageHandlers() []ServiceMessageHandler {
 	return s.ServiceMessageHandlers()
 }

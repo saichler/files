@@ -1,6 +1,7 @@
-cd ../habitat/MyHabitat
+cd ../habitat/golang/MyHabitat
 go build
-cd ../../files/
+cp MyHabitat ../../../files/.
+cd ../../../files/
 go build -buildmode=plugin -o FileService.so FileServiceMain.go
 
 #env GOOS=freebsd GOARCH=amd64 go build

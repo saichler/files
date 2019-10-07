@@ -2,7 +2,7 @@ package main
 
 import (
 	. "github.com/saichler/files/service"
-	. "github.com/saichler/habitat/service"
+	. "github.com/saichler/habitat/golang/service"
 	. "github.com/saichler/utils/golang"
 	"os"
 	"strings"
@@ -11,9 +11,9 @@ import (
 var ServiceInstance Service = &FileService{}
 
 func main() {
-	s,err:=NewServiceManager()
-	if err!=nil {
-		Error("Failed to load habitat",err)
+	s, err := NewServiceManager()
+	if err != nil {
+		Error("Failed to load habitat", err)
 		return
 	}
 
@@ -21,8 +21,8 @@ func main() {
 
 	args := os.Args[1:]
 
-	for _,arg:=range args {
-		if strings.Contains(arg,".so") {
+	for _, arg := range args {
+		if strings.Contains(arg, ".so") {
 			s.InstallService(arg)
 		} else {
 			s.Habitat().Uplink(arg)
